@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Typography, Avatar, TextField, Button } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles'
 import { useState} from 'react'
@@ -14,6 +14,8 @@ function Register() {
   const [travellerFullname , setTravellerFullname]  = useState('')
   const [travellerEmail , setTravellerEmail]  = useState('')
   const [travellerPassword , setTravellerPassword]  = useState('')
+
+  const navigator = useNavigate()
 
   const handleSelectFileClick = (e) =>{
     const file = e.target.files[0]
@@ -33,11 +35,36 @@ function Register() {
       alert('ป้อนอีเมล์ด้วย')
     }else if( travellerPassword.trim().length == 0){
       alert('ป้อนรหัสผ่านด้วย')
-    }else if( travellerImage == null){
-      alert('เลือกรูปด้วย')
     }else{
       //ส่งข้อมูลไปให้ API บันทึงลง DB แล้ว redirect ไปหน้า Login
+      //เอาข้อมูลเก็บใส่ FormData
+      const formData = new FormData()
+      
+      formData.append('travellerFullname',travellerFullname)
+      formData.append('travellerEmail',travellerEmail)
+      formData.append('travellerPassword',travellerPassword)
 
+      if(travellerImage){
+        formData.append('travellerImage',travellerImage)
+      }
+
+      //เอาข้อมูลจาก FormData ส่งไปให้ API (http://localhost:4000/traveller/) แบบ POST
+      try{
+        const response = await fetch('http://localhost:4000/traveller/',{
+          method: 'POST',
+          body: formData,
+        })
+
+        if( response.status == 201){
+          alert('ลงทะเบียนสำเร็จ')
+          // navigator('/')
+          window.location.href('/')
+        }else{
+          alert('ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่อีกครั้ง')
+        }
+      }catch(error){
+        alert('พบข้อผิดพลาดในการทำงาน: ', error)
+      }
     }    
   }
 

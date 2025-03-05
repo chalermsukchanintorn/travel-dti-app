@@ -20,7 +20,7 @@ function App() {
           <Route path="/mytravel" element={<MyTravel />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/addmytravel" element={<AddMyTravel />} />
-          <Route path="/editmytravel" element={<EditMyTravel />} />
+          <Route path="/editmytravel/:travelId" element={<EditMyTravel />} />
         </Routes>
       </BrowserRouter>
     </>
