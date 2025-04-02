@@ -8,6 +8,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles'
 import Place from './../assets/place.png'
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function EditMyTravel() {
   const [travellerFullname, setTravellerFullname] = useState('')
@@ -36,19 +37,27 @@ function EditMyTravel() {
     setTravellerId(traveller.travellerId)
 
     const getTravel = async ()=>{
-      const resData = await fetch(`http://localhost:4000/travel/one/${travelId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      // const resData = await fetch(`http://localhost:4000/travel/one/${travelId}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // })
 
-      const data = await resData.json()
-      setTravelPlace(data["data"].travelPlace)
-      setTravelStartDate(data["data"].travelStartDate)
-      setTravelEndDate(data["data"].travelEndDate)
-      setTravelCostTotal(data["data"].travelCostTotal)
-      setTravelImage(data["data"].travelImage)
+      const resData = await axios.get(`http://localhost:4000/travel/one/${travelId}`)
+
+      // const data = await resData.json()
+      // setTravelPlace(data["data"].travelPlace)
+      // setTravelStartDate(data["data"].travelStartDate)
+      // setTravelEndDate(data["data"].travelEndDate)
+      // setTravelCostTotal(data["data"].travelCostTotal)
+      // setTravelImage(data["data"].travelImage)
+
+      setTravelPlace(resData.data["data"].travelPlace)
+      setTravelStartDate(resData.data["data"].travelStartDate)
+      setTravelEndDate(resData.data["data"].travelEndDate)
+      setTravelCostTotal(resData.data["data"].travelCostTotal)
+      setTravelImage(resData.data["data"].travelImage)
     }
     getTravel()
   }, [])
@@ -101,9 +110,15 @@ function EditMyTravel() {
       } 
 
       try{
-        const response = await fetch(`http://localhost:4000/travel/${travelId}`,{
-          method: 'PUT',
-          body: formData,
+        // const response = await fetch(`http://localhost:4000/travel/${travelId}`,{
+        //   method: 'PUT',
+        //   body: formData,
+        // })
+
+        const response = await axios.put(`http://localhost:4000/travel/${travelId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
 
         if( response.status == 200){

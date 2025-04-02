@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Profile from './../assets/profile.png'
 import Place from './../assets/place.png'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 import React from 'react'
 
@@ -23,31 +24,35 @@ function MyTravel() {
 
     //ดึงข้อมูลจาก DB ของ traveller ที่ login เข้ามา เพื่อนำมาแสดง
     const getAllTravel = async () => {
-      const resData = await fetch(`http://localhost:4000/travel/${traveller.travellerId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      // const resData = await fetch(`http://localhost:4000/travel/${traveller.travellerId}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // })
+
+      const resData = await axios.get(`http://localhost:4000/travel/${traveller.travellerId}`)
 
       if (resData.status == 200) {
-        const data = await resData.json()
-        setTravel(data["data"])
+        // const data = await resData.json()
+        // setTravel(data["data"])
+        setTravel(resData.data["data"])
       }
     }
     getAllTravel()
-
   }, [])
 
   //ฟังก์ชันลบ
   const handleDeleteTravelClick = async (travelId)=>{
     try{
-      const response  = await fetch(`http://localhost:4000/travel/${travelId}`,{
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      // const response  = await fetch(`http://localhost:4000/travel/${travelId}`,{
+      //   method: 'DELETE',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // })
+
+      const response  = await axios.delete(`http://localhost:4000/travel/${travelId}`)
 
       if(response.status === 200){
         alert('ลบข้อมูลเรียบร้อยแล้ว')

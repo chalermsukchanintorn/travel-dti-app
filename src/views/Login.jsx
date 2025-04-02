@@ -7,6 +7,7 @@ import React from 'react'
 import { Box, Typography, Avatar, TextField, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
+import axios from 'axios'
 
 import Travel from './../assets/travel.png'
 
@@ -32,22 +33,27 @@ function Login() {
     //ส่งข้อมูลไปยัง API เพื่อตรวจสอบและไปยังหน้าถัดไป MyTravel (/mytravel)
     try {
       // const response = await fetch('http://localhost:4000/traveller/'+travellerEmail+'/'+travellerPassword,{
-      const response = await fetch(`http://localhost:4000/traveller/${travellerEmail}/${travellerPassword}`,{
-        method: 'GET'
-      })
+      
+      // const response = await fetch(`http://localhost:4000/traveller/${travellerEmail}/${travellerPassword}`,{
+      //   method: 'GET'
+      // })
 
-      console.log(response.status)
+      const response = await axios.get(`http://localhost:4000/traveller/${travellerEmail}/${travellerPassword}`)
 
-      if(response.status == 200){
+      if (response.status == 200) {
         // window.location.href('/mytravel')
         //เอาข้อมูลของ Traveller ที่ Login ผ่านเก็บใส่ memory
-        const data = await response.json()
-        localStorage.setItem('traveller', JSON.stringify(data["data"]))
+
+        // const data = await response.json()
+        // localStorage.setItem('traveller', JSON.stringify(data["data"]))
+
+        localStorage.setItem('traveller', JSON.stringify(response.data["data"]))
+        
         //แล้วค่อยเปิดไปหน้า /mytravel
         navigator('/mytravel')
-      }else if(response.status == 404){
+      } else if (response.status == 404) {
         alert('ชื่อผู้ใช้รหัสผ่าน ไม่ถูกต้อง')
-      }else{
+      } else {
         alert('Login ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง')
       }
     } catch (error) {

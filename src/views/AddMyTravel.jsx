@@ -8,6 +8,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles'
 import Place from './../assets/place.png'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 function AddMyTravel() {
   const [travellerFullname, setTravellerFullname] = useState('')
@@ -81,9 +82,15 @@ function AddMyTravel() {
 
       //เอาข้อมูลจาก FormData ส่งไปให้ API (http://localhost:4000/travel/) แบบ POST
       try{
-        const response = await fetch('http://localhost:4000/travel/',{
-          method: 'POST',
-          body: formData,
+        // const response = await fetch('http://localhost:4000/travel/',{
+        //   method: 'POST',
+        //   body: formData,
+        // })
+
+        const response = await axios.post('http://localhost:4000/travel/', formData,{
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
 
         if( response.status == 201){

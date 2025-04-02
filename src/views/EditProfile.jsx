@@ -3,6 +3,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import { useEffect, useState } from 'react';
 import Profile from './../assets/profile.png'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -81,9 +82,15 @@ function EditProfile() {
 
       //เอาข้อมูลจาก FormData ส่งไปให้ API (http://localhost:4000/traveller/) แบบ POST
       try{
-        const response = await fetch(`http://localhost:4000/traveller/${travellerId}`,{
-          method: 'PUT',
-          body: formData,
+        // const response = await fetch(`http://localhost:4000/traveller/${travellerId}`,{
+        //   method: 'PUT',
+        //   body: formData,
+        // })
+
+        const response = await axios.put(`http://localhost:4000/traveller/${travellerId}`,formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
 
         if( response.status == 200){

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles'
 import { useState} from 'react'
+import axios from 'axios';
 
 import Travel from './../assets/travel.png'
 import Profile from './../assets/profile.png'
@@ -50,9 +51,15 @@ function Register() {
 
       //เอาข้อมูลจาก FormData ส่งไปให้ API (http://localhost:4000/traveller/) แบบ POST
       try{
-        const response = await fetch('http://localhost:4000/traveller/',{
-          method: 'POST',
-          body: formData,
+        // const response = await fetch('http://localhost:4000/traveller/',{
+        //   method: 'POST',
+        //   body: formData,
+        // })
+
+        const response = await axios.post('http://localhost:4000/traveller/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
 
         if( response.status == 201){
